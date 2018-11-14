@@ -53,6 +53,10 @@ echo "===> Assets management"
 echo "---> Running Yarn"
 chown -R www-data:www-data /powerdns-admin/app/static
 chown -R www-data:www-data /powerdns-admin/node_modules
+mkdir -p /var/www
+chown www-data:www-data -R /var/www
+su -s /bin/bash -c 'touch /var/www/.yarnrc' www-data
+su -s /bin/bash -c 'yarn config set registry "https://registry.npm.taobao.org"' www-data
 su -s /bin/bash -c 'yarn install --pure-lockfile' www-data
 
 echo "---> Running Flask assets"

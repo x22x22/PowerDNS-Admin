@@ -5,7 +5,12 @@ ENV ENVIRONMENT=${ENVIRONMENT}
 
 WORKDIR /powerdns-admin
 
-RUN apt-get update -y
+RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list
+RUN sed -i 's/security.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list
+RUN mkdir -p $HOME/.config/pip
+COPY ./pip.conf /root/.config/pip/pip.conf
+RUN cat $HOME/.config/pip/pip.conf
+RUN apt-get update -y && apt-get install --assume-yes apt-utils
 RUN apt-get install -y apt-transport-https
 
 RUN apt-get install -y locales locales-all
@@ -14,7 +19,6 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 
 RUN apt-get install -y python3-pip python3-dev supervisor curl mysql-client
-
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list
 
